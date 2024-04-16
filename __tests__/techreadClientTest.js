@@ -35,17 +35,18 @@ describe('TestTechreadClient', () => {
 
     test("Read with hooks?", async () => {
         const drawing = getDrawing();
-        var content = null;
+        var message = null;
 
         const client = await W24TechreadClient.makeFromEnv();
         const hooks = [
             new Hook({
                 ask:W24AskTitleBlock.parse({}),
-                func: async (result) => {content = result;}
+                func: async (result) => {message = result;}
             })
         ];
 
         await client.readDrawingWithHooks(drawing, hooks);
+        console.log(message);
     }, 30000);
 
 
