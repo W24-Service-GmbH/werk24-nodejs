@@ -14,11 +14,7 @@ class TechreadClientHttps {
         this.techreadVersion = techreadVersion;
         this.supportBaseUrl = supportBaseUrl;
         this.authClient = null; // This will hold the authClient similar to the Python code
-        this.axiosInstance = axios.create({
-            httpsAgent: new https.Agent({
-                rejectUnauthorized: true // Ensures SSL/TLS verification similar to certifi
-            })
-        });
+
     }
 
     setAuthClient(authClient) {
@@ -26,20 +22,26 @@ class TechreadClientHttps {
     }
 
     async uploadAssociatedFile(presignedPost, content) {
-        if (!content) {
+        if (content == null) {
             return; // Ignore if payload is empty
         }
 
-        const formData = new FormData(); // Assuming FormData is defined or using `form-data` npm package
+        // Append the fields from the pre-signed POST data
+        const formData = new FormData();
         Object.entries(presignedPost.fields).forEach(([key, value]) => {
             formData.append(key, value);
         });
-        formData.append("file", content);
 
+        // Append the file; 'file' is the key used for the file content in S3 POST
+        formData.append('file', content);
+
+        // Make the POST request to the pre-signed POST URL
         try {
-            const response = await this.axiosInstance.post(presignedPost.url, formData, {
-                headers: formData.getHeaders() // Make sure headers are set for multipart/form-data
-            });
+            const response = await axios.post(
+                presignedPost.url,
+                formData,
+                {...formData.getHeaders()},
+            );
             this._raiseForStatus(presignedPost.url, response.status);
         } catch (error) {
             this._raiseForStatus(presignedPost.url, error.response.status);
@@ -48,7 +50,7 @@ class TechreadClientHttps {
 
     async downloadPayload(payloadUrl) {
         try {
-            const response = await this.axiosInstance.get(payloadUrl);
+            const response = await axios.get(payloadUrl);
             this._raiseForStatus(payloadUrl, response.status);
             return response.data;
         } catch (error) {

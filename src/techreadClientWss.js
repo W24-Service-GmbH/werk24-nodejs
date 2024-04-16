@@ -72,26 +72,26 @@ class TechreadClientWss {
 
     async *listen() {
         // Set a flag to indicate the WebSocket's connection status
-        const onClose = new Promise((resolve) => this.ws.on('close', resolve));
+        const onClose = new Promise((resolve) => this.ws.on('close', () => resolve(undefined)));
 
         while (this.ws.readyState === WebSocket.OPEN) {
             try {
                 // Wait for either a new message or the WebSocket to close
-        const message = await Promise.race([
-            this.recvMessage(),
-            onClose
-        ]);
+                const message = await Promise.race([
+                    this.recvMessage(),
+                    onClose
+                ]);
 
-        // If the WebSocket closes, message will be undefined
-        if (message === undefined) break;
+                // If the WebSocket closes, message will be undefined
+                if (message === undefined) break;
+                yield message;
 
-        yield message;
-    } catch (error) {
-        // Handle any errors that might occur during message receiving
-        console.error('Error receiving message:', error);
-        break;
-    }
-}
+            } catch (error) {
+                // Handle any errors that might occur during message receiving
+                console.error('Error receiving message:', error);
+                break;
+            }
+        }
     }
 }
 

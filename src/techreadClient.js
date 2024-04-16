@@ -48,10 +48,22 @@ class Hook {
      * Either a message_type or an ask must be registered. Be careful when registering an ask;
      * a complete W24Ask definition is required, not just the ask type.
      */
-    constructor(message_type, message_subtype, ask, func) {
-        this.message_type = message_type;
-        this.message_subtype = message_subtype;
-        this.func = func;
+    constructor(options) {
+        var ask = options.ask || null;
+        var messageType = options.messageType || null;
+        var messageSubtype = options.messageSubtype || null;
+
+        if (ask != null){
+            this.messageType = "ASK";
+            this.messageSubtype = ask.ask_type;
+            this.ask = ask;
+
+        } else {
+            this.messageType = messageType;
+            this.messageSubtype = messageSubtype;
+            this.ask = null;
+        }
+        this.func = options.func;
     }
 };
 
@@ -219,14 +231,13 @@ class W24TechreadClient {
     }
 
     async *readRequest(initResponse, asks, drawing, model = null) {
-
         // Upload drawing and optionally the model in parallel
         try {
             // Assuming uploadAssociatedFile returns a Promise
             await this.techreadClientHttps.uploadAssociatedFile(initResponse.drawing_presigned_post, drawing);
 
             if (model !== null) {
-                await this.techreadClientHttps.uploadAssociatedFile(initResponse.drawing_presigned_post, model);
+                await this.techreadClientHttps.uploadAssociatedFile(initResponse.model_presigned_post, model);
             }
         } catch (error) {
             // Handle exceptions specifically if the payload is too large
@@ -325,14 +336,9 @@ class W24TechreadClient {
         // Filter the callback requests to only contain the ask types
         const asksList = hooks.filter(hook => hook.ask).map(hook => hook.ask);
 
-        try {
-            // Assuming `readDrawing` is an async generator in the `techreadClient`
-            for await (const message of this.readDrawing(drawing, asksList, maxPages, drawingFilename)) {
-                await this.callHooksForMessage(message, hooks);
-            }
-        } catch (error) {
-            console.error("Server exception:", error.message);
-            throw new Error("ServerException");
+        // Assuming `readDrawing` is an async generator in the `techreadClient`
+        for await (const message of this.readDrawing(drawing, asksList, null, maxPages, drawingFilename)) {
+            await this.callHooksForMessage(message, hooks);
         }
     }
 
@@ -356,22 +362,23 @@ class W24TechreadClient {
             hookFunction(message);
         }
     }
-    static getHookFunctionForMessage(message, hooks) {
+
+    getHookFunctionForMessage(message, hooks) {
         const hookFilter = (hook) => {
-            if (message.messageType === W24TechreadMessageType.ASK) {
-                return hook.ask !== null && message.messageSubtype.value === hook.ask.askType.value;
+            if (message.message_type == "ASK") {
+                return hook.ask !== null && message.message_subtype === hook.messageSubtype;
             } else {
                 return hook.messageType !== null && hook.messageSubtype !== null &&
-                       message.messageType === hook.messageType && message.messageSubtype === hook.messageSubtype;
+                       message.message_type === hook.messageType && message.message_subtype === hook.messageSubtype;
             }
         };
 
         const foundHook = hooks.find(hookFilter);
         if (foundHook) {
-            return foundHook.function;
+            return foundHook.func;
         } else {
             // If no hook matches, log a warning and return null
-            console.warn(`Ignoring message of type ${message.messageType}:${message.messageSubtype} - no hook registered`);
+            console.info(`Ignoring message of type ${message.message_type}:${message.message_subtype} - no hook registered`);
             return null;
         }
     }

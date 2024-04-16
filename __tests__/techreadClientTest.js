@@ -1,5 +1,5 @@
 // Assuming we have equivalent functions and classes in Node.js
-const { W24TechreadClient } = require('../src/techreadClient');
+const { W24TechreadClient, Hook } = require('../src/techreadClient');
 
 const fs = require('fs');
 const {models} = require("../src/models/techread");
@@ -31,6 +31,21 @@ describe('TestTechreadClient', () => {
         const client = await W24TechreadClient.makeFromEnv(null);
         for await (const msg of client.readDrawing(drawing, asks, model)) {
         }
+    }, 30000);
+
+    test("Read with hooks?", async () => {
+        const drawing = getDrawing();
+        var content = null;
+
+        const client = await W24TechreadClient.makeFromEnv();
+        const hooks = [
+            new Hook({
+                ask:W24AskTitleBlock.parse({}),
+                func: async (result) => {content = result;}
+            })
+        ];
+
+        await client.readDrawingWithHooks(drawing, hooks);
     }, 30000);
 
 
