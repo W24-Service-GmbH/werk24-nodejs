@@ -18,7 +18,7 @@ function readJsonFileSync(filePath) {
     // Read the file and automatically convert it to JSON
     const jsonString = fs.readFileSync(filePath, 'utf8');
     const jsonData = JSON.parse(jsonString);
-    return parseJsonData(jsonData);
+    return parseJsonData(jsonData.schemata);
 }
 
 const models = readJsonFileSync('./assets/werk24_json_schema.json');

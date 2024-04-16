@@ -2,7 +2,7 @@
 const { W24TechreadClient, Hook } = require('../src/techreadClient');
 
 const fs = require('fs');
-const {models} = require("../src/models/techread");
+const {models} = require("../src/models");
 const W24AskTitleBlock = models["werk24.models.ask.W24AskTitleBlock"];
 const W24AskPageThumbnail = models["werk24.models.ask.W24AskPageThumbnail"];
 

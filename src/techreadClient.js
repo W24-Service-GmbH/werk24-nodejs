@@ -4,7 +4,7 @@ const exceptions = require('./exceptions');
 const techreadClientHttps = require('./techreadClientHttps');
 const techreadClientWss = require('./techreadClientWss');
 const authClient = require('./authClient.js');
-const {models} = require('./models/techread.js');
+const {models} = require('./models.js');
 
 const W24TechreadInitResponse = models["werk24.models.techread.W24TechreadInitResponse"];
 const W24TechreadExceptionLevel = models["werk24.models.techread.W24TechreadExceptionLevel"];

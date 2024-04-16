@@ -5,7 +5,7 @@ const https = require('https');
 const exceptions = require('./exceptions');
 const FormData = require('form-data');
 const clientVersion = require('../package.json').version
-const {models} = require('./models/techread.js');
+const {models} = require('./models.js');
 
 const W24TechreadWithCallbackPayload = models["werk24.models.techread.W24TechreadWithCallbackPayload"];
 

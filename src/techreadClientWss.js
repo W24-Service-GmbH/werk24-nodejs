@@ -1,6 +1,6 @@
 const WebSocket = require('ws');
 const { v4: uuidv4 } = require('uuid');
-const {models} = require("./models/techread");
+const {models} = require("./models");
 
 const W24TechreadMessage = models["werk24.models.techread.W24TechreadMessage"];
 
