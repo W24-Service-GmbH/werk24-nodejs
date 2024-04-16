@@ -27,7 +27,6 @@
   ],
   "scripts": {
     "test": "jest --detectOpenHandles",
-    "install": "pip install --upgrade -r requirements.txt"
   },
   "repository": {
     "type": "git",

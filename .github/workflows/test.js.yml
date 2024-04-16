@@ -16,27 +16,19 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x]
+        node-version: [18.x, 19.x, 20.x]
 
     steps:
-    - uses: actions/checkout@v2
-      
+    - uses: actions/checkout@v4
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Set up Python
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.8
-    
-    - name: Install the Python client
-      run: pip install werk24==0.5.0rc1
-        
     - name: Setup npm
       run: npm ci
-      
+
     - name: Run the tests
       env:
         W24TECHREAD_AUTH_REGION: ${{ secrets.W24TECHREAD_AUTH_REGION }}
@@ -49,4 +41,4 @@ jobs:
         W24TECHREAD_SERVER_HTTPS: ${{ secrets.W24TECHREAD_SERVER_HTTPS }}
         W24TECHREAD_SERVER_WSS: ${{ secrets.W24TECHREAD_SERVER_WSS }}
         W24TECHREAD_VERSION: ${{ secrets.W24TECHREAD_VERSION }}
-      run: npm run itest
+      run: npm run test
