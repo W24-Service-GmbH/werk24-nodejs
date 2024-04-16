@@ -3,16 +3,21 @@
   "version": "0.5.5",
   "main": "index.js",
   "dependencies": {
-    "minimist": "^1.2.5",
-    "python-bridge": "^1.1.0"
+    "axios": "^1.6.8",
+    "form-data": "^4.0.0",
+    "joi": "^17.12.3",
+    "json-schema-to-zod": "^2.0.14",
+    "uuid": "^9.0.1",
+    "ws": "^8.16.0",
+    "zod": "^3.22.4"
   },
   "engines": {
     "node": ">=10.0.0"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "mocha": "^8.2.0",
-    "supertest": "^5.0.0"
+    "@babel/core": "^7.24.4",
+    "@babel/preset-env": "^7.24.4",
+    "jest": "^29.7.0"
   },
   "keywords": [
     "Technical Drawings",
@@ -21,8 +26,7 @@
     "DXF"
   ],
   "scripts": {
-    "test": "mocha --timeout 30000 ./__tests__/**/*.js",
-    "itest": "mocha --timeout 30000 ./__int_tests__/**/*.js",
+    "test": "jest --detectOpenHandles",
     "install": "pip install --upgrade -r requirements.txt"
   },
   "repository": {
