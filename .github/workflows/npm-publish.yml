@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: 12
       - run: npm ci
-      - run: npm run itest
+      - run: npm run test
         env:
           W24TECHREAD_AUTH_TOKEN: ${{ secrets.W24TECHREAD_AUTH_TOKEN }}
 
