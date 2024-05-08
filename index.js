@@ -8,5 +8,5 @@ const {models} = require('./src/models.js');
 module.exports = {
     Hook: libTechreadClient.Hook,
     W24TechreadClient: libTechreadClient.W24TechreadClient,
-    techread_models: models
+    w24Models: models
 };

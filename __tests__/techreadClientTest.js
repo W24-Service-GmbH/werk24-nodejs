@@ -2,9 +2,9 @@
 const { W24TechreadClient, Hook } = require('../src/techreadClient');
 
 const fs = require('fs');
-const {models} = require("../src/models");
-const W24AskTitleBlock = models["werk24.models.ask.W24AskTitleBlock"];
-const W24AskPageThumbnail = models["werk24.models.ask.W24AskPageThumbnail"];
+const {w24Models} = require("../index");
+const W24AskTitleBlock = w24Models["werk24.models.ask.W24AskTitleBlock"];
+const W24AskPageThumbnail = w24Models["werk24.models.ask.W24AskPageThumbnail"];
 
 function getDrawing(filePath="__tests__/assets/test_drawing.pdf") {
     try {
