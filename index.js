@@ -2,7 +2,7 @@
 /* jslint node: true */
 "use strict";
 
-const libTechreadClient = require('./src/techread_client.js');
+const libTechreadClient = require('./src/techreadClient.js');
 const {models} = require('./models/techread.js');
 
 module.exports = {
