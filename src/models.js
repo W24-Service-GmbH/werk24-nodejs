@@ -1,5 +1,6 @@
 const fs = require('fs');
 const { jsonSchemaToZod } = require("json-schema-to-zod");
+const path = require('path');
 
 function deserializeJsonSchema(jsonSchema) {
     return eval(jsonSchemaToZod(jsonSchema, { module: "cjs" }));
@@ -15,13 +16,13 @@ function parseJsonData(jsonData) {
 }
 
 function readJsonFileSync(filePath) {
-    // Read the file and automatically convert it to JSON
     const jsonString = fs.readFileSync(filePath, 'utf8');
     const jsonData = JSON.parse(jsonString);
     return parseJsonData(jsonData.schemata);
 }
 
-const models = readJsonFileSync('./assets/werk24_json_schema.json');
+const schemaPath = path.resolve(__dirname, '../assets/werk24_json_schema.json')
+const models = readJsonFileSync(schemaPath);
 
 module.exports ={
     models

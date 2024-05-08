@@ -2,11 +2,11 @@
 /* jslint node: true */
 "use strict";
 
-const libTechreadClient = require('./src/techread_client.js');
-const {models} = require('./models/techread.js');
+const libTechreadClient = require('./src/techreadClient.js');
+const {models} = require('./src/models.js');
 
 module.exports = {
     Hook: libTechreadClient.Hook,
     W24TechreadClient: libTechreadClient.W24TechreadClient,
-    techread_models: models
+    w24Models: models
 };
