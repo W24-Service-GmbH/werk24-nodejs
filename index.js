@@ -3,7 +3,7 @@
 "use strict";
 
 const libTechreadClient = require('./src/techreadClient.js');
-const {models} = require('./models/techread.js');
+const {models} = require('./src/models.js');
 
 module.exports = {
     Hook: libTechreadClient.Hook,
